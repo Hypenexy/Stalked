@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -8,39 +9,68 @@ import {
   Pressable,
 } from "react-native";
 
+import "./languages/i18n";
+import { useTranslation } from "react-i18next";
+
 export default function App() {
+  const { t, i18n } = useTranslation();
+
+  const [currentLanguage, setLanguage] = useState("en");
+
+  const changeLanguage = (value) => {
+    i18n
+      .changeLanguage(value)
+      .then(() => setLanguage(value))
+      .catch((err) => console.log(err));
+  };
+
   console.log("app launched");
 
-  const sosBtn = () => console.log("kur appears");
+  const sosBtn = () => {
+    console.log("kur appears");
+    changeLanguage("en");
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Pressable style={styles.sos} onPress={sosBtn}>
-        <Text style={styles.sosText}>SOS</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <Pressable style={styles.sos} onPress={sosBtn}>
+          <Text style={styles.sosText}>SOS</Text>
+        </Pressable>
 
-      <View style={styles.div}>
-        <Text style={styles.divTitle}>your data</Text>
-      </View>
-      <View style={styles.div}>
-        <Text style={styles.divTitle}>logged with</Text>
-      </View>
-      <Text>About</Text>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+        <View style={styles.div}>
+          <Text style={styles.divTitle}>{t("yourData")}</Text>
+        </View>
+        <View style={styles.div}>
+          <Text style={styles.divTitle}>{t("loggedWith")}</Text>
+        </View>
+        <Text>About</Text>
+
+        <Pressable onPress={() => changeLanguage("en")}>
+          <Text>En</Text>
+        </Pressable>
+        <Pressable onPress={() => changeLanguage("bg")}>
+          <Text>Bg</Text>
+        </Pressable>
+
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    overflow: "scroll", // what
   },
   sos: {
     width: 99,
     height: 99,
+    marginTop: "50%",
     marginBottom: 20,
     zIndex: 2,
 
