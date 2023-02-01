@@ -103,7 +103,19 @@ header a:active{
 .feature{
     padding: 100px 0;
 }
-/* Fix this for different sizes! */
-.mdblock{
-    padding: 0 100px;
+
+@media screen and (min-width: 300px) {
+    .mdblock{
+        padding: 0 10px;
+    }
+}
+@media screen and (min-width: 700px) {
+    .mdblock{
+        padding: 0 100px;
+    }
+}
+@media screen and (min-width: 1400px) {
+    .mdblock{
+        padding: 0 200px;
+    }
 }

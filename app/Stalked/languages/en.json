@@ -1,6 +1,15 @@
 {
     "translation": {
+        "welcome":"Welcome to Stalked",
+        "welcomeDescription":"Keeping you and others safe from harm",
         "yourData":"your data",
-        "loggedWith":"logged with"
+        "loggedWith":"logged with",
+        "createAnAccount":"Create an Account",
+        "signIn":"Sign In",
+        "createAnAccountInstead":"Create an Account instead",
+        "signInInstead":"Sign In instead",
+        "email":"Email",
+        "username":"Username",
+        "password":"Password"
     }
 }

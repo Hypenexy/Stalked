@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stalked API Documentation</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        *{box-sizing: border-box;margin: 0;font-family: sans-serif;}
+        body{
+            background: #000;
+            color: #fff;
+        }
+        h1{
+            margin: 20px 0;
+        }
+        h2{
+            margin: 20px 0 10px 0;
+        }
+        p,li{
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="mdblock">
+        <h1>Stalked API Documentation</h1>
+        <p>It's my first time writing a documentation intended for a public API use, so don't expect much.<br>All API is intended for the client to use, so there are no API keys for now since you probably should let the client connect and not a third party.</p>
+        <div class="section">
+            <h2>/account</h2>
+            <p>Handles the login and register of accounts.</p>
+            <p>Accepts only <b>Post</b> requests with the following parameters:</p>
+            <li><b>"type"</b> - can be either "login" or "register"</li>
+            <li><b>"email"</b> - can be any string that is an email</li>
+            <li><b>"username"</b> - can be any string that meets the username requirements</li>
+            <li><b>"password"</b> - can be any string that meets the password requirements</li>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,15 @@
 {
     "translation": {
+        "welcome":"Добре дошли в Дебнат",
+        "welcomeDescription":"Предпазва вас и другите от нараняване",
         "yourData":"вашата информация",
-        "loggedWith":"вписани в"
+        "loggedWith":"вписани в",
+        "createAnAccount":"Създай Акаунт",
+        "signIn":"Вписване",
+        "createAnAccountInstead":"Създай Акаунт вместо",
+        "signInInstead":"Вписване вместо",
+        "email":"Имейл",
+        "username":"Потребител",
+        "password":"Парола"
     }
 }
