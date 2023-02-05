@@ -10,6 +10,7 @@
         "signInInstead":"Вписване вместо",
         "email":"Имейл",
         "username":"Потребител",
-        "password":"Парола"
+        "password":"Парола",
+        "emailOrUsername":"Имейл или Потребител"
     }
 }

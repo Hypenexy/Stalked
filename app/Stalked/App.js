@@ -1,3 +1,4 @@
+const server = "http://10.0.2.2/Stalked/api/";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -33,10 +34,74 @@ export default function App() {
     // sos button actions here
   };
 
+  const [ISshowRegister, setISshowRegister] = useState(false);
+  const showRegister = () => {
+    setISshowRegister(true);
+  };
+  const hideRegister = () => {
+    setISshowRegister(false);
+  };
+
+  const [ISshowLogin, setISshowLogin] = useState(false);
+  const showLogin = () => {
+    setISshowLogin(true);
+  };
+  const hideLogin = () => {
+    setISshowLogin(false);
+  };
+
+  const client = async () => {
+    await CookieManager.clearAll(); //clearing cookies stored
+    //natively before each
+    //request
+    const cookie = await AsyncStorage.getItem("cookie");
+    return await fetch("api/data", {
+      headers: {
+        cookie: cookie,
+      },
+    });
+  };
+
   const registerButton = () => {
-    console.log(onEmail);
-    console.log(onUsername);
-    console.log(onPassword);
+    if (
+      onEmail !== undefined ||
+      onUsername !== undefined ||
+      onPassword !== undefined
+    ) {
+      console.log("clicked yes");
+      // console.log(onEmail);
+      // console.log(onUsername);
+      // console.log(onPassword);
+      console.log(server + "account/");
+      fetch("http://10.0.2.2/Stalked/api/account/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "register",
+          email: onEmail,
+          username: onUsername,
+          password: onPassword,
+        }),
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // fetch("http://facebook.github.io/react-native/movies.json")
+      //   .then((response) => response.json())
+      //   .then((responseJson) => {
+      //     console.log(responseJson.movies);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
+    }
   };
 
   const [myText, setMyText] = useState("");
@@ -51,78 +116,121 @@ export default function App() {
             style={styles.loginImage}
             source={require("./assets/Running-Man.png")}
           />
-          <View style={styles.registerForm}>
-            <Text style={styles.loginWelcome}>{t("createAnAccount")}</Text>
-            <View style={styles.divCenter}>
-              <TextInput
-                autoComplete="email"
-                inputMode="email"
-                keyboardType="email-address"
-                style={styles.loginInput}
-                onChangeText={(e) => {
-                  if (e.toString() != "undefined") {
-                    // it's undefined sometimes?? Only on emulator and not my iphone 12
+          {ISshowLogin ? (
+            <View style={styles.registerForm}>
+              <Text style={styles.loginWelcome}>{t("createAnAccount")}</Text>
+              <View style={styles.divCenter}>
+                <TextInput
+                  autoComplete="email"
+                  inputMode="email"
+                  keyboardType="email-address"
+                  style={styles.loginInput}
+                  onChangeText={(e) => {
                     onEmail = e;
-                  }
-                }}
-                onBlur={() => {
-                  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-                  console.log(onEmail);
-                  if (reg.test(onEmail) === false) {
-                    setMyText("Email is incorrect format");
-                  } else {
-                    if (myText == "Email is incorrect format") {
-                      // there are some cases where the error message will be removed but im too lazy to fix
-                      setMyText("");
-                    }
-                  }
-                }}
-                placeholder={t("email")}
-                placeholderTextColor={theme["ch"]}
-              />
-              <TextInput
-                autoComplete="username"
-                style={styles.loginInput}
-                onChangeText={(e) => {
-                  onUsername = e;
-                  if (e.length < 4 || e.length > 29) {
-                    setMyText("Username must be between 3 and 30 characters");
-                  } else {
-                    if (
-                      myText == "Username must be between 3 and 30 characters"
-                    ) {
-                      setMyText("");
-                    }
-                  }
-                }}
-                placeholder={t("username")}
-                placeholderTextColor={theme["ch"]}
-              />
-              <TextInput
-                autoComplete="password"
-                secureTextEntry={true}
-                style={styles.loginInput}
-                onChangeText={(e) => {
-                  onPassword = e;
-                }}
-                placeholder={t("password")}
-                placeholderTextColor={theme["ch"]}
-              />
-              <Text style={styles.loginInputError}>{myText}</Text>
+                  }}
+                  placeholder={t("email")}
+                  placeholderTextColor={theme["ch"]}
+                />
+
+                <TextInput
+                  autoComplete="password"
+                  secureTextEntry={true}
+                  style={styles.loginInput}
+                  onChangeText={(e) => {
+                    onPassword = e;
+                  }}
+                  placeholder={t("password")}
+                  placeholderTextColor={theme["ch"]}
+                />
+                <Text style={styles.loginInputError}>{myText}</Text>
+              </View>
+              <View style={styles.divCenter}>
+                <Pressable style={styles.login} onPress={hideRegister}>
+                  <Text style={styles.loginText}>{t("signInInstead")}</Text>
+                </Pressable>
+                <Pressable style={styles.register} onPress={registerButton}>
+                  <Text style={styles.registerText}>
+                    {t("createAnAccount")}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-            <View style={styles.divCenter}>
-              <Pressable style={styles.login} onPress={registerButton}>
-                <Text style={styles.loginText}>{t("signInInstead")}</Text>
-              </Pressable>
-              <Pressable style={styles.register} onPress={registerButton}>
-                <Text style={styles.registerText}>{t("createAnAccount")}</Text>
-              </Pressable>
+          ) : null}
+          {ISshowRegister ? (
+            <View style={styles.registerForm}>
+              <Text style={styles.loginWelcome}>{t("createAnAccount")}</Text>
+              <View style={styles.divCenter}>
+                <TextInput
+                  autoComplete="email"
+                  inputMode="email"
+                  keyboardType="email-address"
+                  style={styles.loginInput}
+                  onChangeText={(e) => {
+                    if (e.toString() != "undefined") {
+                      // it's undefined sometimes?? Only on emulator and not my iphone 12
+                      onEmail = e;
+                    }
+                  }}
+                  onBlur={() => {
+                    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+                    if (reg.test(onEmail) === false) {
+                      setMyText("Email is incorrect format");
+                    } else {
+                      if (myText == "Email is incorrect format") {
+                        // there are some cases where the error message will be removed but im too lazy to fix
+                        setMyText("");
+                      }
+                    }
+                  }}
+                  placeholder={t("email")}
+                  placeholderTextColor={theme["ch"]}
+                />
+                <TextInput
+                  autoComplete="username"
+                  style={styles.loginInput}
+                  onChangeText={(e) => {
+                    onUsername = e;
+                    if (e.length < 4 || e.length > 29) {
+                      setMyText("Username must be between 3 and 30 characters");
+                    } else {
+                      if (
+                        myText == "Username must be between 3 and 30 characters"
+                      ) {
+                        setMyText("");
+                      }
+                    }
+                  }}
+                  placeholder={t("username")}
+                  placeholderTextColor={theme["ch"]}
+                />
+                <TextInput
+                  autoComplete="password"
+                  secureTextEntry={true}
+                  style={styles.loginInput}
+                  onChangeText={(e) => {
+                    onPassword = e;
+                  }}
+                  placeholder={t("password")}
+                  placeholderTextColor={theme["ch"]}
+                />
+                <Text style={styles.loginInputError}>{myText}</Text>
+              </View>
+              <View style={styles.divCenter}>
+                <Pressable style={styles.login} onPress={hideRegister}>
+                  <Text style={styles.loginText}>{t("signInInstead")}</Text>
+                </Pressable>
+                <Pressable style={styles.register} onPress={registerButton}>
+                  <Text style={styles.registerText}>
+                    {t("createAnAccount")}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-          </View>
+          ) : null}
           <View style={styles.bottomWelcome}>
             <Text style={styles.loginWelcome}>{t("welcome")}</Text>
             <Text style={styles.loginWelcome2}>{t("welcomeDescription")}</Text>
-            <Pressable style={styles.register} onPress={sosBtn}>
+            <Pressable style={styles.register} onPress={showRegister}>
               <Text style={styles.registerText}>{t("createAnAccount")}</Text>
             </Pressable>
             <Pressable style={styles.login} onPress={sosBtn}>
@@ -226,6 +334,7 @@ const styles = StyleSheet.create({
     color: theme["b"],
     fontWeight: "600",
     borderRadius: 12,
+    overflow: "hidden",
     backgroundColor: theme[4],
     width: "90%",
     maxWidth: 300,
@@ -265,6 +374,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
+  },
+  registerFormHidden: {
+    display: "none",
   },
   registerForm: {
     zIndex: 2,

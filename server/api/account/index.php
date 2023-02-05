@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Validates a user string and checks if it's an email and if it's taken.
  * @param string $email String inputted from user that is an email
@@ -11,7 +10,7 @@ function ValidateEmail($email, $conn)
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Invalid email format";
     } else {
-        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `profiles` WHERE email='$email'"))) {
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `users` WHERE email='$email'"))) {
             return "Email already taken";
         } else {
             return 201;
@@ -35,7 +34,7 @@ function ValidateUsername($username, $conn)
             if (!preg_match("/^[0-9a-zA-Z-' ]*$/", $username)) {
                 return "Only letters and white space allowed";
             } else {
-                if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `profiles` WHERE username='$username'"))) {
+                if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `users` WHERE username='$username'"))) {
                     return "Username already taken";
                 } else {
                     return 201;
@@ -66,7 +65,9 @@ function ValidatePassword($password, $conn)
     }
 }
 
+$result;
 if (isset($_POST["type"])) {
+    require("../server/session.php");
     require("../server/db.php");
     require("../server/querySQL.php");
     $conn = new mysqli($host, $user, $pass, 'stalked');
@@ -88,32 +89,33 @@ if (isset($_POST["type"])) {
                         $_SESSION["loggedin"] = mysqli_fetch_assoc($autoincrementid)["Auto_increment"];
                         $result = $conn->query("INSERT INTO `users` (`email`, `username`, `password`, `created`) VALUES ('$email', '$username', '$password', '$time')");
                         if ($result) {
-                            echo 201;
+                            $result = 201;
                         } else {
-                            echo "Something has gone wrong! " . $conn->errorno;
+                            $result = "Something has gone wrong! " . $conn->errorno;
                         }
                     } else {
-                        echo $passwordValidation;
+                        $result = $passwordValidation;
                     }
                 } else {
-                    echo $usernameValidation;
+                    $result = $usernameValidation;
                 }
             } else {
-                echo $emailValidation;
+                $result = $emailValidation;
             }
             break;
         case 'login':
-            $autoincrementid = $conn->query("SELECT `uid` FROM `stalked` WHERE `password`='$password' and `username` = '$username' or `email` = '$email'");
+            $autoincrementid = $conn->query("SELECT `uid` FROM `users` WHERE `password`='$password' and `username` = '$username' or `email` = '$email'");
             $_SESSION["loggedin"] = mysqli_fetch_assoc($autoincrementid);
             if ($result) {
-                echo 201; // Debug this!
+                $result = 201; // Debug this!
             } else {
-                echo "Something has gone wrong! " . $conn->errorno;
+                $result = "Something has gone wrong! " . $conn->errorno;
             }
             break;
         default:
-            echo "You haven't specified a valid type. It's either ";
+            $result = "You haven't specified a valid type. It's either ";
             break;
     }
     $conn->close();
 }
+echo json_encode(array('status' => $result));

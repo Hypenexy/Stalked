@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stalked API Debug tool</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        *{box-sizing: border-box;margin: 0;font-family: sans-serif;}
+        body{
+            background: #111;
+            color: #fff;
+        }
+        h1{
+            margin: 20px 0;
+        }
+        h2{
+            margin: 20px 0 10px 0;
+        }
+        p,li{
+            margin: 4px 0;
+        }
+        form *{
+            display: block;
+            margin-bottom: 12px;
+            width: 150px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mdblock">
+        <h1>Account Form</h1>
+        <form action="account/" method="post">
+            <select name="type">
+                <option>register</option>
+                <option>login</option>
+            </select>
+            <input name="email" placeholder="Email">
+            <input name="username" placeholder="Username">
+            <input name="password" placeholder="Password">
+            <button type="reset">Reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

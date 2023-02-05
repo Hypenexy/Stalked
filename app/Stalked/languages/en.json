@@ -10,6 +10,7 @@
         "signInInstead":"Sign In instead",
         "email":"Email",
         "username":"Username",
-        "password":"Password"
+        "password":"Password",
+        "emailOrUsername":"Email or Username"
     }
 }
