@@ -63,6 +63,7 @@ export default function App() {
   };
 
   const registerButton = () => {
+    // I don't know how to check for a timeout
     if (
       onEmail !== undefined ||
       onUsername !== undefined ||

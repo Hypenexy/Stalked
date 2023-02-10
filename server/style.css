@@ -1,11 +1,13 @@
 *{box-sizing: border-box;margin: 0;padding: 0;font-family: sans-serif;}
 
 header{
+    background: #eee;
+    box-shadow: 0 0 3px #000000ee;
+}
+header .mdblock{
     display: flex;
     padding: 12px;
     height: 72px;
-    background: #eee;
-    box-shadow: 0 0 3px #000000ee;
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -98,13 +100,14 @@ header a:active{
 
 .features .feature:nth-child(2n){
     text-align: right;
+    background: #eee;
 }
 
 .feature{
     padding: 100px 0;
 }
 
-@media screen and (min-width: 300px) {
+/* @media screen and (min-width: 300px) {
     .mdblock{
         padding: 0 10px;
     }
@@ -118,4 +121,37 @@ header a:active{
     .mdblock{
         padding: 0 200px;
     }
+} */
+
+.mdblock {
+	width: 90%;
+	/* padding-right: 15px;
+	padding-left: 15px; */
+	margin-right: auto;
+	margin-left: auto;
+}
+@media (min-width: 576px) {
+	.mdblock {
+		max-width: 540px;
+	}
+}
+@media (min-width: 768px) {
+	.mdblock {
+		max-width: 720px;
+	}
+}
+@media (min-width: 992px) {
+	.mdblock {
+		max-width: 960px;
+	}
+}
+@media (min-width: 1200px) {
+	.mdblock {
+		max-width: 1140px;
+	}
+}
+@media (min-width: 1400px) {
+	.mdblock {
+		max-width: 1340px;
+	}
 }
