@@ -118,4 +118,6 @@ if (isset($_POST["type"])) {
     }
     $conn->close();
 }
-echo json_encode(array('status' => $result));
+//echo json_encode(array('status' => $result));
+header("allow-control-access-origin: *, Content-Type: application/json");
+echo json_encode($_POST);

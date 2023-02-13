@@ -62,6 +62,15 @@ export default function App() {
     });
   };
 
+  const loginButton = () => {
+    if (
+      onEmail !== undefined ||
+      onPassword !== undefined
+    ) {
+      console.log("clicked yes");
+    }
+  }
+
   const registerButton = () => {
     // I don't know how to check for a timeout
     if (
@@ -70,29 +79,60 @@ export default function App() {
       onPassword !== undefined
     ) {
       console.log("clicked yes");
-      // console.log(onEmail);
-      // console.log(onUsername);
-      // console.log(onPassword);
-      console.log(server + "account/");
-      fetch("http://10.0.2.2/Stalked/api/account/", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "register",
-          email: onEmail,
-          username: onUsername,
-          password: onPassword,
-        }),
-      })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+
+      console.log(JSON.stringify({
+        type: "register",
+        email: onEmail,
+        username: onUsername,
+        password: onPassword,
+      }))
+      
+
+
+      // fetch("https://midelight.net/Stalked/api/account/", {
+      //   method: "POST",
+      //   credentials: "include", 
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     type: "register",
+      //     email: onEmail,
+      //     username: onUsername,
+      //     password: onPassword,
+      //   }),
+      // })
+
+      var xmlhttp = new XMLHttpRequest(); 
+      var theUrl = "https://midelight.net/Stalked/api/account/";
+      xmlhttp.open("POST", theUrl);
+      xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xmlhttp.send(JSON.stringify({ 
+        type: "register",
+        email: onEmail,
+        username: onUsername,
+        password: onPassword, 
+      }));
+
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4) {
+          console.log(xmlhttp.response);
+        }
+      }
+    
+
+
+        // .then((response) => {
+        //   console.log(response);
+        // })
+        // .then((response) => response.json())
+        // .then((responseJson) => {
+        //   console.log(responseJson);
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // });
 
       // fetch("http://facebook.github.io/react-native/movies.json")
       //   .then((response) => response.json())
@@ -104,6 +144,8 @@ export default function App() {
       //   });
     }
   };
+
+  //https://www.npmjs.com/package/react-native-bluetooth-devices
 
   const [myText, setMyText] = useState("");
 
@@ -119,7 +161,7 @@ export default function App() {
           />
           {ISshowLogin ? (
             <View style={styles.registerForm}>
-              <Text style={styles.loginWelcome}>{t("createAnAccount")}</Text>
+              <Text style={styles.loginWelcome}>{t("signIn")}</Text>
               <View style={styles.divCenter}>
                 <TextInput
                   autoComplete="email"
@@ -129,7 +171,7 @@ export default function App() {
                   onChangeText={(e) => {
                     onEmail = e;
                   }}
-                  placeholder={t("email")}
+                  placeholder={t("emailOrUsername")}
                   placeholderTextColor={theme["ch"]}
                 />
 
@@ -146,12 +188,12 @@ export default function App() {
                 <Text style={styles.loginInputError}>{myText}</Text>
               </View>
               <View style={styles.divCenter}>
-                <Pressable style={styles.login} onPress={hideRegister}>
-                  <Text style={styles.loginText}>{t("signInInstead")}</Text>
+                <Pressable style={styles.login} onPress={hideLogin}>
+                  <Text style={styles.loginText}>{t("createAnAccountInstead")}</Text>
                 </Pressable>
-                <Pressable style={styles.register} onPress={registerButton}>
+                <Pressable style={styles.register} onPress={loginButton}>
                   <Text style={styles.registerText}>
-                    {t("createAnAccount")}
+                    {t("signIn")}
                   </Text>
                 </Pressable>
               </View>
@@ -234,7 +276,7 @@ export default function App() {
             <Pressable style={styles.register} onPress={showRegister}>
               <Text style={styles.registerText}>{t("createAnAccount")}</Text>
             </Pressable>
-            <Pressable style={styles.login} onPress={sosBtn}>
+            <Pressable style={styles.login} onPress={showLogin}>
               <Text style={styles.loginText}>{t("signIn")}</Text>
             </Pressable>
           </View>
