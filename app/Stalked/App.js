@@ -34,6 +34,14 @@ export default function App() {
     // sos button actions here
   };
 
+  const [ISshowWelcome, setISshowWelcome] = useState(false);
+  const showWelcome = () => {
+    setISshowWelcome(true);
+  };
+  const hideWelcome = () => {
+    setISshowWelcome(false);
+  };
+
   const [ISshowRegister, setISshowRegister] = useState(false);
   const showRegister = () => {
     setISshowRegister(true);
@@ -87,52 +95,52 @@ export default function App() {
         password: onPassword,
       }))
       
+      // var xmlhttp = new XMLHttpRequest(); 
+      // var theUrl = "https://midelight.net/Stalked/api/account/";
+      // xmlhttp.open("POST", theUrl);
+      // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      // xmlhttp.send(JSON.stringify({ 
+      //   type: "register",
+      //   email: onEmail,
+      //   username: onUsername,
+      //   password: onPassword, 
+      // }));
+      // xmlhttp.onreadystatechange = () => {
+      //   if (xmlhttp.readyState === 4) {
+      //     console.log(xmlhttp.response);
+      //   }
+      // }
+      
 
+      var data = new FormData()
+      data.append('typee', 'okie')
+  
+      fetch("https://midelight.net/Stalked/api/account/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // Accept: "application/json",
+          // "Content-Type": "application/json",
+        },
+        body: data
+        // body: JSON.stringify({
+        //   type: "register",
+        //   email: onEmail,
+        //   username: onUsername,
+        //   password: onPassword,
+        // }),
+      })
 
-      // fetch("https://midelight.net/Stalked/api/account/", {
-      //   method: "POST",
-      //   credentials: "include", 
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     type: "register",
-      //     email: onEmail,
-      //     username: onUsername,
-      //     password: onPassword,
-      //   }),
-      // })
-
-      var xmlhttp = new XMLHttpRequest(); 
-      var theUrl = "https://midelight.net/Stalked/api/account/";
-      xmlhttp.open("POST", theUrl);
-      xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xmlhttp.send(JSON.stringify({ 
-        type: "register",
-        email: onEmail,
-        username: onUsername,
-        password: onPassword, 
-      }));
-
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4) {
-          console.log(xmlhttp.response);
-        }
-      }
-    
-
-
-        // .then((response) => {
-        //   console.log(response);
-        // })
+        .then((response) => {
+          console.log(response);
+        })
         // .then((response) => response.json())
         // .then((responseJson) => {
         //   console.log(responseJson);
         // })
-        // .catch((error) => {
-        //   console.error(error);
-        // });
+        .catch((error) => {
+          console.error(error);
+        });
 
       // fetch("http://facebook.github.io/react-native/movies.json")
       //   .then((response) => response.json())
@@ -154,6 +162,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
+        {ISshowWelcome ? (
         <LinearGradient colors={[theme["b"], theme[6]]} style={styles.loginDiv}>
           <Image
             style={styles.loginImage}
@@ -280,7 +289,7 @@ export default function App() {
               <Text style={styles.loginText}>{t("signIn")}</Text>
             </Pressable>
           </View>
-        </LinearGradient>
+        </LinearGradient>) : null}
 
         <Pressable style={styles.sos} onPress={sosBtn}>
           <Text style={styles.sosText}>SOS</Text>
