@@ -20,7 +20,7 @@ if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG
             // $sql = "FLUSH PRIVILEGES";
             // $reason = "Flush priveleges";
             // echo querySQL($sql, $conn, $reason);
-            $sql = "CREATE TABLE `stalked`.`users` (`uid` INT NOT NULL AUTO_INCREMENT , `email` VARCHAR(320) NOT NULL , `username` VARCHAR(30) NOT NULL , `password` INT(200) NOT NULL , `created` INT(20) NOT NULL , PRIMARY KEY (`uid`), UNIQUE (`email`), UNIQUE (`username`)) ENGINE = InnoDB";
+            $sql = "CREATE TABLE `stalked`.`users` (`uid` INT NOT NULL AUTO_INCREMENT , `email` VARCHAR(320) NOT NULL , `username` VARCHAR(30) NOT NULL , `password` VARCHAR(255) NOT NULL , `created` INT(20) NOT NULL , PRIMARY KEY (`uid`), UNIQUE (`email`), UNIQUE (`username`)) ENGINE = InnoDB";
             $reason = "Creating table users";
             echo querySQL($sql, $conn, $reason);
             $sql = "CREATE TABLE `stalked`.`friends` (`uid` INT NOT NULL , `fid` INT NOT NULL , `created` INT(20) NOT NULL , UNIQUE `friends` (`uid`, `fid`)) ENGINE = InnoDB";

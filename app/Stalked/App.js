@@ -1,4 +1,4 @@
-const server = "http://10.0.2.2/Stalked/api/";
+// const server = "http://10.0.2.2/Stalked/api/";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -11,6 +11,8 @@ import {
   TextInput,
 } from "react-native";
 
+import * as $ from 'jquery';
+
 import { LinearGradient } from "expo-linear-gradient";
 
 import "./languages/i18n";
@@ -19,7 +21,32 @@ import { useTranslation } from "react-i18next";
 export default function App() {
   const { t, i18n } = useTranslation();
 
-  const [currentLanguage, setLanguage] = useState("en");
+  const [currentLanguage, setLanguage] = useState("bg");
+
+  const sendData = (url, data, successAction, rejectAction) => {
+    var formBody = [];
+    for (var property in data) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(data[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formBody
+    })
+    .then(response => response.json())
+    .then(data => {
+      successAction(data)
+    })
+    .catch(error => {
+      rejectAction(error)
+    });
+  }
 
   var onEmail, onUsername, onPassword;
 
@@ -34,7 +61,7 @@ export default function App() {
     // sos button actions here
   };
 
-  const [ISshowWelcome, setISshowWelcome] = useState(false);
+  const [ISshowWelcome, setISshowWelcome] = useState(true);
   const showWelcome = () => {
     setISshowWelcome(true);
   };
@@ -75,7 +102,26 @@ export default function App() {
       onEmail !== undefined ||
       onPassword !== undefined
     ) {
-      console.log("clicked yes");
+      var data = {
+        type: "login",
+        email: onEmail,
+        password: onPassword,
+      };
+
+      console.log(data)
+
+      sendData("http://10.0.2.2/Stalked/api/account/", data,
+        function(data){
+          console.log(data)
+          console.log(data.status)
+          if(data.status==201){
+            hideWelcome()
+          }
+        },
+        function(data){
+          console.log(data)
+        }
+      )
     }
   }
 
@@ -86,76 +132,31 @@ export default function App() {
       onUsername !== undefined ||
       onPassword !== undefined
     ) {
-      console.log("clicked yes");
-
-      console.log(JSON.stringify({
+      var data = {
         type: "register",
         email: onEmail,
         username: onUsername,
         password: onPassword,
-      }))
-      
-      // var xmlhttp = new XMLHttpRequest(); 
-      // var theUrl = "https://midelight.net/Stalked/api/account/";
-      // xmlhttp.open("POST", theUrl);
-      // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      // xmlhttp.send(JSON.stringify({ 
-      //   type: "register",
-      //   email: onEmail,
-      //   username: onUsername,
-      //   password: onPassword, 
-      // }));
-      // xmlhttp.onreadystatechange = () => {
-      //   if (xmlhttp.readyState === 4) {
-      //     console.log(xmlhttp.response);
-      //   }
-      // }
-      
+      };
 
-      var data = new FormData()
-      data.append('typee', 'okie')
-  
-      fetch("https://midelight.net/Stalked/api/account/", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          // Accept: "application/json",
-          // "Content-Type": "application/json",
+      sendData("http://10.0.2.2/Stalked/api/account/", data,
+        function(data){
+          console.log(data)
+          console.log(data.status)
+          if(data.status==201){
+            hideWelcome()
+          }
         },
-        body: data
-        // body: JSON.stringify({
-        //   type: "register",
-        //   email: onEmail,
-        //   username: onUsername,
-        //   password: onPassword,
-        // }),
-      })
-
-        .then((response) => {
-          console.log(response);
-        })
-        // .then((response) => response.json())
-        // .then((responseJson) => {
-        //   console.log(responseJson);
-        // })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      // fetch("http://facebook.github.io/react-native/movies.json")
-      //   .then((response) => response.json())
-      //   .then((responseJson) => {
-      //     console.log(responseJson.movies);
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   });
+        function(data){
+          console.log(data)
+        }
+      )
     }
   };
 
   //https://www.npmjs.com/package/react-native-bluetooth-devices
 
-  const [myText, setMyText] = useState("");
+  const [errText, seterrText] = useState("");
 
   var loggedIn = false;
 
@@ -194,7 +195,7 @@ export default function App() {
                   placeholder={t("password")}
                   placeholderTextColor={theme["ch"]}
                 />
-                <Text style={styles.loginInputError}>{myText}</Text>
+                <Text style={styles.loginInputError}>{errText}</Text>
               </View>
               <View style={styles.divCenter}>
                 <Pressable style={styles.login} onPress={hideLogin}>
@@ -226,11 +227,11 @@ export default function App() {
                   onBlur={() => {
                     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
                     if (reg.test(onEmail) === false) {
-                      setMyText("Email is incorrect format");
+                      seterrText("Email is incorrect format");
                     } else {
-                      if (myText == "Email is incorrect format") {
+                      if (errText == "Email is incorrect format") {
                         // there are some cases where the error message will be removed but im too lazy to fix
-                        setMyText("");
+                        seterrText("");
                       }
                     }
                   }}
@@ -243,12 +244,12 @@ export default function App() {
                   onChangeText={(e) => {
                     onUsername = e;
                     if (e.length < 4 || e.length > 29) {
-                      setMyText("Username must be between 3 and 30 characters");
+                      seterrText("Username must be between 3 and 30 characters");
                     } else {
                       if (
-                        myText == "Username must be between 3 and 30 characters"
+                        errText == "Username must be between 3 and 30 characters"
                       ) {
-                        setMyText("");
+                        seterrText("");
                       }
                     }
                   }}
@@ -265,7 +266,7 @@ export default function App() {
                   placeholder={t("password")}
                   placeholderTextColor={theme["ch"]}
                 />
-                <Text style={styles.loginInputError}>{myText}</Text>
+                <Text style={styles.loginInputError}>{errText}</Text>
               </View>
               <View style={styles.divCenter}>
                 <Pressable style={styles.login} onPress={hideRegister}>

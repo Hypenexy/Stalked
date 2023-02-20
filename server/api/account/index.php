@@ -65,7 +65,7 @@ function ValidatePassword($password, $conn)
     }
 }
 
-$result;
+$result = "undefined";
 if (isset($_POST["type"])) {
     require("../server/session.php");
     require("../server/db.php");
@@ -79,15 +79,14 @@ if (isset($_POST["type"])) {
             $emailValidation = ValidateEmail($email, $conn);
             $usernameValidation = ValidateUsername($username, $conn);
             $passwordValidation = ValidatePassword($password, $conn);
+			$hashedPassword = password_hash($password, PASSWORD_DEFAULT); // will be changed in midelight production don't worry
             if ($emailValidation == 201) {
                 if ($usernameValidation == 201) {
                     if ($passwordValidation == 201) {
                         $time = strtotime("now");
-                        $hashedPassword = crypt($password, '82b07f84edbd91a91ea0'); // will be changed in production don't worry
-
                         $autoincrementid = $conn->query("SHOW TABLE STATUS FROM `stalked` WHERE `name` LIKE 'users'");
                         $_SESSION["loggedin"] = mysqli_fetch_assoc($autoincrementid)["Auto_increment"];
-                        $result = $conn->query("INSERT INTO `users` (`email`, `username`, `password`, `created`) VALUES ('$email', '$username', '$password', '$time')");
+                        $result = $conn->query("INSERT INTO `users` (`email`, `username`, `password`, `created`) VALUES ('$email', '$username', '$hashedPassword', '$time')");
                         if ($result) {
                             $result = 201;
                         } else {
@@ -104,13 +103,26 @@ if (isset($_POST["type"])) {
             }
             break;
         case 'login':
-            $autoincrementid = $conn->query("SELECT `uid` FROM `users` WHERE `password`='$password' and `username` = '$username' or `email` = '$email'");
-            $_SESSION["loggedin"] = mysqli_fetch_assoc($autoincrementid);
-            if ($result) {
-                $result = 201; // Debug this!
-            } else {
-                $result = "Something has gone wrong! " . $conn->errorno;
-            }
+            $checkLogin = $conn->query("SELECT `uid`, `password` FROM `users` WHERE `username` = '$email' OR `email` = '$email'");
+			if($checkLogin){
+				$num_rows = mysqli_num_rows($checkLogin);
+				if($num_rows){
+					$fetch_assoc = mysqli_fetch_assoc($checkLogin);
+					if(password_verify($password, $fetch_assoc['password'])){
+						$_SESSION["loggedin"] = $fetch_assoc['uid'];
+						$result = 201;
+					}
+					else{
+						$result = "Wrong info!";
+					}
+				}
+				else{
+					$result = "Wrong info!";
+				}
+			}
+			else{
+				$result = "Something has gone wrong! " . $conn->errorno;
+			}
             break;
         default:
             $result = "You haven't specified a valid type. It's either ";
@@ -118,6 +130,5 @@ if (isset($_POST["type"])) {
     }
     $conn->close();
 }
-//echo json_encode(array('status' => $result));
-header("allow-control-access-origin: *, Content-Type: application/json");
-echo json_encode($_POST);
+echo json_encode(array('status' => $result));
+header("allow-control-access-origin: *");
