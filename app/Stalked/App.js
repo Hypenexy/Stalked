@@ -110,7 +110,7 @@ export default function App() {
 
       console.log(data)
 
-      sendData("http://10.0.2.2/Stalked/api/account/", data,
+      sendData("https://midelight.net/Stalked/api/account/", data,
         function(data){
           console.log(data)
           console.log(data.status)
@@ -139,7 +139,7 @@ export default function App() {
         password: onPassword,
       };
 
-      sendData("http://10.0.2.2/Stalked/api/account/", data,
+      sendData("https://midelight.net/Stalked/api/account/", data,
         function(data){
           console.log(data)
           console.log(data.status)

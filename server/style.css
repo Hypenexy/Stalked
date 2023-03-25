@@ -6,7 +6,7 @@ header{
 }
 header .mdblock{
     display: flex;
-    padding: 12px;
+    /* padding: 12px; */
     height: 72px;
     overflow-x: auto;
     white-space: nowrap;
@@ -42,6 +42,20 @@ header a:active{
 
     background: #65baff55;
 }
+.background{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    width: 100%;
+    height: 672px;
+    overflow: hidden;
+}
+.background img{
+    object-fit: cover;
+    width: 100%;
+}
 .landscape .block{
     position: absolute;
     bottom: 0;
@@ -57,7 +71,7 @@ header a:active{
     align-items: center;
     justify-content: space-evenly;
 
-    background-image: url(assets/placeholderImage.jpg);
+    /* background-image: url(assets/phoneFull.png); */
     background-size: cover;
     background-position-x: right;
     background-position-y: center;
@@ -72,7 +86,7 @@ header a:active{
 }
 
 .download{
-    width: 200px;
+    width: 240px;
     text-align: center;
     background-color: #eee;
     padding: 24px;
@@ -81,6 +95,10 @@ header a:active{
 }
 
 .download h1{
+    font-weight: 300;
+    margin-bottom: 24px;
+}
+.download h2{
     font-weight: 300;
     margin-bottom: 24px;
 }
@@ -107,7 +125,7 @@ header a:active{
     padding: 100px 0;
 }
 
-/* @media screen and (min-width: 300px) {
+@media screen and (min-width: 300px) {
     .mdblock{
         padding: 0 10px;
     }
@@ -121,7 +139,7 @@ header a:active{
     .mdblock{
         padding: 0 200px;
     }
-} */
+}
 
 .mdblock {
 	width: 90%;
